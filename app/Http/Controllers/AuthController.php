@@ -16,6 +16,9 @@ class AuthController extends Controller
                     'data' => null
                 ], 401);
             }
+
+            $user = Auth::user();
+            $token = $user->createToken('auth_token')->plainTextToken;
         } catch (\Throwable $th) {
             //throw $th;
         }
