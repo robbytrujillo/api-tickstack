@@ -20,7 +20,7 @@ class AuthController extends Controller
             $user = Auth::user();
             $token = $user->createToken('auth_token')->plainTextToken;
         } catch (\Throwable $th) {
-            //throw $th;
+            
         }
     }
 }
