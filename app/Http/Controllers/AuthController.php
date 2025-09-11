@@ -52,4 +52,21 @@ class AuthController extends Controller
             ], 500);
         }
     }
+
+    public function logout() {
+        try {
+            $user = Auth::user();
+            $user->currentAccessToken()->delete();
+
+            return response()->json([
+                    'message' => 'Logout Berhasil',
+                    'data' => null
+                ], 200);
+        } catch (Exception $e) {
+             return response()->json([
+                'message' => 'Terjadi Kesalahan',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
