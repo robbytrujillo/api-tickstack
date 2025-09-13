@@ -84,6 +84,18 @@ class AuthController extends Controller
             $user->email = $data['email'];
             $user->password = Hash::make($data['password']);
             $user->save();
+
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            DB::commit();
+
+            return response()->json([   
+                'message' => 'Registrasi Berhasil!',
+                'data'  => [
+                    'token' => $token,
+                    'user' => New UserResource($user),
+                ]
+            ])
         } catch (\Throwable $th) {
             //throw $th;
         }
