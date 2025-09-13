@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\UserResource;
 use Exception;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\TryCatch;
+use Illuminate\Support\Facades\DB;
+use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\RegisterStoreRequest;
 
 class AuthController extends Controller
 {
@@ -67,6 +69,21 @@ class AuthController extends Controller
                 'message' => 'Terjadi Kesalahan',
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    public function register(RegisterStoreRequest $request) {
+        $data = $request->validate();
+
+        DB::beginTransaction();
+
+        try {
+            $user = new User;
+            $user->name = $data['name'];
+            $user->email = $data['email'];
+            $user->password = $data['password'];
+        } catch (\Throwable $th) {
+            //throw $th;
         }
     }
 }
