@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use App\Models\User;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Facades\DB;
@@ -81,7 +82,8 @@ class AuthController extends Controller
             $user = new User;
             $user->name = $data['name'];
             $user->email = $data['email'];
-            $user->password = $data['password'];
+            $user->password = Hash::make($data['password']);
+            $user->save();
         } catch (\Throwable $th) {
             //throw $th;
         }
