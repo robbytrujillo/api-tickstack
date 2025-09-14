@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterStoreRequest;
 
 class AuthController extends Controller
@@ -74,7 +75,7 @@ class AuthController extends Controller
     }
 
     public function register(RegisterStoreRequest $request) {
-        $data = $request->validate();
+        $data = $request->validated();
 
         DB::beginTransaction();
 
@@ -95,9 +96,12 @@ class AuthController extends Controller
                     'token' => $token,
                     'user' => New UserResource($user),
                 ]
-            ])
-        } catch (\Throwable $th) {
-            //throw $th;
+            ], 201);
+        } catch (Exception $e) {
+             return response()->json([
+                'message' => 'Terjadi Kesalahan',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 }
