@@ -10,6 +10,21 @@ use App\Models\Ticket;
 
 class TicketController extends Controller
 {
+    public function index(Request $request) {
+        $query = Ticket::query();
+
+        $query->orderBy('created_at', 'desc');
+
+        if ($request->search) {
+            $query->where('code', 'like', '%' . $request->search . '%')
+                ->onWhere('code', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->status) {
+            $query->where('status' . $request->status);
+        }
+    }
+    
     public function store(TicketStoreRequest $request) {
         $data = $request->validated();
 
