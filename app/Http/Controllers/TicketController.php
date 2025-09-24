@@ -17,7 +17,7 @@ class TicketController extends Controller
 
         try {
             $ticket = new Ticket;
-            $ticket->user_id = auth()->user->id;
+            $ticket->user_id = auth()->user()->id;
             $ticket->code = 'TIC-' . rand(10000, 99999);
             $ticket->title = $data['title'];
             $ticket->description = $data['description'];
