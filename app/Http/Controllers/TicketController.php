@@ -62,8 +62,16 @@ class TicketController extends Controller
                     'message' => 'Anda tidak diperbolehkan mengakses tiket ini'
                 ], 403);
             }
-        } catch (\Throwable $th) {
-            //throw $th;
+
+            return response()->json([
+                'message' => 'Ticket berhasil ditampilkan',
+                'data' => new TicketResource($ticket),
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Terjadi Kesalahan',
+                'data' => $e->getMessage(),
+            ], 500);
         }
     }
     
