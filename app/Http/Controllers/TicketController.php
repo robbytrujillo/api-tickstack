@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TicketReplyStoreRequest;
-use App\Http\Resources\TicketResource;
+use App\Models\Ticket;
 use App\Models\TicketReply;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\TicketResource;
 use App\Http\Requests\TicketStoreRequest;
-use App\Models\Ticket;
+use App\Http\Resources\TicketReplyResource;
+use App\Http\Requests\TicketReplyStoreRequest;
 
 class TicketController extends Controller
 {
@@ -145,7 +146,7 @@ class TicketController extends Controller
 
              return response()->json([
                 'message' => 'Balasan berhasil ditambahkan',
-                'data' => TicketReplyResource($ticketReply),
+                'data' => new TicketReplyResource($ticketReply),
             ], 201);
 
         } catch (\Throwable $th) {
