@@ -149,8 +149,13 @@ class TicketController extends Controller
                 'data' => new TicketReplyResource($ticketReply),
             ], 201);
 
-        } catch (\Throwable $th) {
-            //throw $th;
+         } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return response()->json([
+                'message' => 'Terjadi Kesalahan',
+                'data' => $e->getMessage(),
+            ], 500);
         }
     }
 }
