@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DashboardResource;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 class DashboardController extends Controller
 {
     public function getStatistics() {
-        $currentMonth = Carbon::now()->starOfMonth();
-        $endOfMonth = $currentMonth->copy()->endOfMonth;
+        $currentMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = $currentMonth->copy()->endOfMonth();
 
         $totalTickets = Ticket::whereBetween('created_at', [$currentMonth, $endOfMonth])->count();
 
@@ -40,9 +42,13 @@ class DashboardController extends Controller
             'total_tickets' => $totalTickets,
             'active_tickets' => $activeTickets,
             'resolved_tickets' => $resolvedTickets,
-            'avg_revolution_time' => round($avgResolutionTime, 1),
+            'avg_resolution_time' => round($avgResolutionTime, 1),
             'status_distribution' => $statusDistribution,
         ];
 
+        return response()->json([
+            'message' => 'Dashboard statistics fetched successfully',
+            'data' => new DashboardResource($dashboardData)
+        ]);
     }
 }
